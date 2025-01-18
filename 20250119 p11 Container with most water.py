@@ -23,6 +23,7 @@ def maxArea(height: List[int]) -> int:
             continue
         if height[i] * (len(height) - 1 - i) < max_a:
             continue
+        print(f"i:{i}")
         for j in range(i + 1, len(height)):
             if height[j] < min_height_1st:
                 continue
