@@ -2,29 +2,47 @@ from typing import List
 
 
 def threeSum(nums: List[int]) -> List[List[int]]:
+    nums = sorted(nums)
+    print(nums)
     len_nums = len(nums)
     res = []
     to_check = set()
-    to_check_c = {}
-    for i, x in enumerate(nums):
-        if x not in to_check_c.keys():
-            to_check_c[x] = {i}
-        else:
-            to_check_c[x].add(i)
+    to_check_a = set()
 
-    for i in range(len_nums):
+    for i in range(len_nums - 2):
         a = nums[i]
-        for j in range(i + 1, len_nums):
-            b = nums[j]
-            c = -a - b
-            if frozenset({a, b, c}) not in to_check:
-                to_check.add(frozenset({a, b, c}))
-                c_indices = to_check_c.get(c)
-                if c_indices is not None:
-                    for c_index in c_indices:
-                        if c_index != i and c_index != j:
-                            res.append([a, b, c])
-                            break
+        if a in to_check_a:
+            continue
+        else:
+            to_check_a.add(a)
+
+        low = i + 1
+        high = len_nums - 1
+        print(f"{i=} {low=} {high=}")
+        # ii = 0
+        while low < high:
+            b = nums[low]
+            c = nums[high]
+            print(f"{i=} {low=} {high=} {a=} {b=} {c=}")
+
+            if a + b + c == 0:
+                if frozenset({a, b, c}) not in to_check:
+                    to_check.add(frozenset({a, b, c}))
+                    res.append([a, b, c])
+                low += 1
+                high -= 1
+
+            elif a + b + c < 0:
+                low += 1
+            else:
+                high -= 1
+
+            # ii += 1
+            # if ii > 50:
+            #     res.append(None)
+            #     return res
+            #     break
+
     return res
 
 
@@ -43,4 +61,10 @@ def test2():
 def test3():
     nums = [-1, 0, 1, 2, -1, -4]
     res = threeSum(nums)
-    assert res == [[-1, 0, 1], [-1, -1, 2]]
+    assert res == [[-1, -1, 2], [-1, 0, 1]]
+
+
+def test4():
+    nums = [-2, 0, 0, 2, 2]
+    res = threeSum(nums)
+    assert res == [[-2, 0, 2]]
